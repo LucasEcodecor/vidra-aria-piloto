@@ -1,5 +1,6 @@
 import hmac
 from datetime import date, timedelta
+from urllib.parse import quote_plus
 
 import pandas as pd
 import streamlit as st
@@ -80,7 +81,10 @@ def conectar(url: str, chave: str) -> Client:
 def carregar_orcamentos(cliente: Client) -> list[dict]:
     resposta = (
         cliente.table("orcamentos")
-        .select("id,status,valor_total,validade,created_at,arquivo_gerado,clientes(nome)")
+        .select(
+            "id,status,valor_total,validade,created_at,arquivo_gerado,"
+            "clientes(nome,endereco)"
+        )
         .order("created_at", desc=True)
         .execute()
     )
@@ -248,17 +252,32 @@ with aba_pedidos:
         else:
             linhas = []
             for item in orcamentos:
+                cliente = item.get("clientes") or {}
+                endereco = cliente.get("endereco", "").strip()
                 linhas.append(
                     {
                         "OS": item["id"],
-                        "Cliente": (item.get("clientes") or {}).get("nome", ""),
+                        "Cliente": cliente.get("nome", ""),
                         "Status": item["status"],
                         "Valor": item["valor_total"],
                         "Validade": item["validade"],
                         "Arquivo local": "Gerado" if item["arquivo_gerado"] else "Pendente",
+                        "Mapa": (
+                            "https://www.google.com/maps/search/?api=1&query="
+                            f"{quote_plus(endereco)}"
+                            if endereco
+                            else None
+                        ),
                     }
                 )
-            st.dataframe(linhas, use_container_width=True, hide_index=True)
+            st.dataframe(
+                linhas,
+                use_container_width=True,
+                hide_index=True,
+                column_config={"Mapa": st.column_config.LinkColumn(
+                    "Mapa", display_text="Abrir no Maps"
+                )},
+            )
 
             opcoes = {
                 f"OS #{item['id']} — {(item.get('clientes') or {}).get('nome', '')}": item
