@@ -71,13 +71,18 @@ def item_inicial() -> pd.DataFrame:
     )
 
 
-def cabecalho() -> None:
-    logo, titulo = st.columns([1, 10], vertical_alignment="center")
+def cabecalho(mostrar_sair: bool = False) -> None:
+    logo, titulo, acoes = st.columns([1, 9, 1], vertical_alignment="center")
     with logo:
         st.image("assets/logo.svg", width=72)
     with titulo:
         st.title("Vidraçaria Piloto")
         st.caption("Orçamentos, pedidos, produção e instalação")
+    if mostrar_sair:
+        with acoes:
+            if st.button("Sair", use_container_width=True):
+                st.session_state.pop("autenticado", None)
+                st.rerun()
 
 
 def data_brasileira(valor: str | None) -> str:
@@ -174,7 +179,7 @@ supabase_url = str(st.secrets["SUPABASE_URL"]).strip()
 supabase_key = str(st.secrets["SUPABASE_KEY"]).strip()
 supabase = conectar(supabase_url, supabase_key)
 
-cabecalho()
+cabecalho(mostrar_sair=True)
 
 aba_dashboard, aba_novo, aba_pedidos = st.tabs(
     ["📊 Visão geral", "➕ Novo orçamento", "📋 Pedidos"]
