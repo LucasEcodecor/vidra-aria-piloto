@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="Logo Vidraçaria Piloto">
+  <defs>
+    <linearGradient id="glass" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#dff7ff"/>
+      <stop offset="0.55" stop-color="#78cbe8"/>
+      <stop offset="1" stop-color="#2a78a8"/>
+    </linearGradient>
+    <linearGradient id="frame" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#173b57"/>
+      <stop offset="1" stop-color="#071d2d"/>
+    </linearGradient>
+  </defs>
+  <rect x="18" y="18" width="220" height="220" rx="38" fill="url(#frame)"/>
+  <rect x="42" y="42" width="172" height="172" rx="20" fill="url(#glass)" stroke="#ffffff" stroke-width="8"/>
+  <path d="M128 46v164M46 128h164" stroke="#ffffff" stroke-width="10"/>
+  <path d="M62 62l44 44M146 62l50 50M62 146l48 48" stroke="#ffffff" stroke-opacity=".42" stroke-width="8" stroke-linecap="round"/>
+</svg>
