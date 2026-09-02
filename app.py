@@ -73,11 +73,8 @@ def autenticar() -> bool:
 
 
 @st.cache_resource
-def conectar() -> Client:
-    return create_client(
-        str(st.secrets["SUPABASE_URL"]),
-        str(st.secrets["SUPABASE_KEY"]),
-    )
+def conectar(url: str, chave: str) -> Client:
+    return create_client(url, chave)
 
 
 def carregar_orcamentos(cliente: Client) -> list[dict]:
@@ -97,7 +94,9 @@ if "SUPABASE_URL" not in st.secrets or "SUPABASE_KEY" not in st.secrets:
     st.error("Configure SUPABASE_URL e SUPABASE_KEY nos Secrets do Streamlit.")
     st.stop()
 
-supabase = conectar()
+supabase_url = str(st.secrets["SUPABASE_URL"]).strip()
+supabase_key = str(st.secrets["SUPABASE_KEY"]).strip()
+supabase = conectar(supabase_url, supabase_key)
 
 st.title("🪟 Vidraçaria Piloto")
 st.caption("Orçamentos, pedidos, produção e instalação")
